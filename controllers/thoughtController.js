@@ -45,7 +45,7 @@ const thoughtController = {
     async updateThought(req,res) {
         try {
             const thought = await Thought.findOneAndUpdate(
-                { _id: req.params.thoughtId },
+                { _id: req.params.id },
                 { $set: req.body },
                 { runValidators: true, new: true }
             );
@@ -81,7 +81,7 @@ const thoughtController = {
     //add reaction
     async addReaction(req,res) {
         try {
-            const thought = await User.findOneAndUpdate(
+            const thought = await Thought.findOneAndUpdate(
                 {_id: req.params.thoughtId},
                 { $addToSet: { reactions: req.body }},
                 { runValidators: true, new: true }
