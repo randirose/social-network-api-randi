@@ -14,7 +14,7 @@ const userController = {
     //get a single user
     async getSingleUser (req, res) {
         try {
-            const user = await User.findOne({_id: req.params.userId})
+            const user = await User.findOne({_id: req.params.id})
               .select('-__v')
               .populate({
                 path: 'thoughts',
