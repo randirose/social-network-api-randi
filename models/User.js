@@ -1,34 +1,24 @@
-const { Schema, Types } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 
-const userSchema = new Schema(
+const thoughtSchema = new Schema(
   {
-    // assignmentId: {
-    //   type: Schema.Types.ObjectId,
-    //   default: () => new Types.ObjectId(),
-    // },
+    thoughtText: {
+      type: String,
+      required: true,
+      maxlength: 280,
+      minlength: 1,
+    },
     username: {
       type: String,
       required: true,
-      unique: true,
-      trim: true,
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: [/.+@.+\..+/],
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: (time) => date_format(time);
     },
-    students: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Thought',
-        },
-    ],
-    friends: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'User',
-        },
+    reactions: [
+        reactionSchema
     ],
   },
   {
@@ -40,10 +30,42 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.virtual("friendCount").get(function () {
-    return this.friends.length;
+thoughtSchema.virtual("reactionCount").get(function () {
+    return this.reactions.length;
 });
 
-const User = model('user', userSchema);
+const Thought = model('thought', thoughtSchema);
 
-module.exports = assignmentSchema;
+const reactionSchema = new Schema(
+    {
+      reactionId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId(),
+      },
+      reactionBody: {
+        type: String,
+        required: true,
+        maxlength: 280,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      reactions: [
+          reactionSchema
+      ],
+    },
+    {
+      toJSON: {
+        virtuals: true,
+        getters: true,
+      },
+      id: false,
+    }
+  );
+
+module.exports = Thought;
