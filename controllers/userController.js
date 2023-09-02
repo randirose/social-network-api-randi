@@ -48,7 +48,7 @@ const userController = {
         try {
             const user = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { responses: req.body },
+                { $set: req.body },
                 { runValidators: true, new: true }
             );
 

@@ -14,7 +14,7 @@ const thoughtController = {
     //get a single thought
     async getSingleThought (req, res) {
         try {
-            const thought = await Thought.findOne({_id: req.params.thoughtId})
+            const thought = await Thought.findOne({_id: req.params.id})
               .select('-__v')
 
               if (!thought) {
@@ -30,14 +30,15 @@ const thoughtController = {
     async createThought(req, res) {
         try {
           const thought = await Thought.create(req.body);
+          const id = req.body._id;
           await User.findOneAndUpdate(
             { _id: req.body.userId },
-            { $push: {thoughts: _id }},
+            { $push: {thoughts: id }},
             { new: true }
           )
           res.json(thought);
         } catch (err) {
-          res.status(500).json(err);
+          res.status(500).json(err.message);
         }
     },
     //update thought by id
@@ -45,7 +46,7 @@ const thoughtController = {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { responses: req.body },
+                { $set: req.body },
                 { runValidators: true, new: true }
             );
 
