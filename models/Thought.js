@@ -1,31 +1,56 @@
 const { Schema, Types, model } = require('mongoose');
-const date_format = require('../utils/date_format');
+const moment = require('moment');
 
-const userSchema = new Schema(
+const reactionSchema = new Schema(
   {
+    reactionId: {
+      type: Schema.Types.ObjectId,
+      default: () => new Types.ObjectId(),
+    },
+    reactionBody: {
+      type: String,
+      required: true,
+      maxlength: 280,
+    },
     username: {
       type: String,
       required: true,
-      unique: true,
-      trim: true,
     },
-    email: {
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: createdAtTime => moment(createdAtTime).format('MMM DD, YYY [at[ hh:mm a'),
+    },
+  },
+  {
+    toJSON: {
+      virtuals: true,
+      getters: true,
+    },
+    id: false,
+  }
+);
+
+
+const thoughtSchema = new Schema(
+  {
+    thoughtText: {
       type: String,
       required: true,
-      unique: true,
-      match: [/.+@.+\..+/],
+      maxlength: 280,
+      minlength: 1,
     },
-    students: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Thought',
-        },
-    ],
-    friends: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'User',
-        },
+    username: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: createdAtTime => moment(createdAtTime).format('MMM DD, YYY [at[ hh:mm a'),
+    },
+    reactions: [
+        reactionSchema
     ],
   },
   {
@@ -37,10 +62,10 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.virtual("friendCount").get(function () {
-    return this.friends.length;
+thoughtSchema.virtual("reactionCount").get(function () {
+    return this.reactions.length;
 });
 
-const User = model('user', userSchema);
+const Thought = model('thought', thoughtSchema);
 
-module.exports = assignmentSchema;
+module.exports = Thought;
