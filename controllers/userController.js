@@ -1,5 +1,5 @@
 const { User, Thought } = require('../models');
-const { rawListeners } = require('../models/User');
+
 // functionality for api/users endpoint
 const userController = {
     //get all users
