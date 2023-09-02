@@ -1,4 +1,5 @@
 const { User, Thought } = require('../models');
+const { rawListeners } = require('../models/User');
 // functionality for api/users endpoint
 const userController = {
     //get all users
@@ -68,13 +69,45 @@ const userController = {
           if (!user) {
             return res.status(404).json({ message: 'No user with that ID' });
           }
-    
+    //!!!!! BONUS!!!!!!! delete associated user thoughts when user is deleted !!!!!BONUS!!!!!!//
           await Thought.deleteMany({ _id: { $in: user.thoughts } });
           res.json({ message: 'User and associated thoughts deleted!' })
         } catch (err) {
           res.status(500).json(err);
         }
     },
+    //add friend
+    async addFriend(req,res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                {_id: req.params.userId},
+                { $addToSet: { friends: req.params.friendId }},
+                { runValidators: true, new: true }
+            );
+            if (!user) {
+                return res.status(404).json({ message: 'no user with that id!' })
+            }
+            res.json(user);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+    //remove friend
+    async removeFriend(req, res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                {_id: req.params.userId},
+                { $pull: { friends: req.params.friendId }},
+                { new: true}
+            );
+            if (!user) {
+                return res.status(404).json({ message: 'no user with that id!' })
+            }
+            res.json(user);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    }
 }
 
 module.exports = userController;
