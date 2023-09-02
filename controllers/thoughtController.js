@@ -62,7 +62,7 @@ const thoughtController = {
     //delete thought by id and remove from its associated users
     async deleteThought(req, res) {
         try {
-          const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
+          const thought = await Thought.findOneAndDelete({ _id: req.params.id });
     
           if (!thought) {
             return res.status(404).json({ message: 'No thought with that ID' });

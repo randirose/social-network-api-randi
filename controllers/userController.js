@@ -64,7 +64,7 @@ const userController = {
     //delete user by id and its associated thoughts
     async deleteUser(req, res) {
         try {
-          const user = await User.findOneAndDelete({ _id: req.params.userId });
+          const user = await User.findOneAndDelete({ _id: req.params.id });
     
           if (!user) {
             return res.status(404).json({ message: 'No user with that ID' });
