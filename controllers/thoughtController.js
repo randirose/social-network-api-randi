@@ -30,10 +30,9 @@ const thoughtController = {
     async createThought(req, res) {
         try {
           const thought = await Thought.create(req.body);
-          const id = req.body._id;
           await User.findOneAndUpdate(
             { _id: req.body.userId },
-            { $push: {thoughts: id }},
+            { $push: {thoughts: thought._id }},
             { new: true }
           )
           res.json(thought);
