@@ -39,7 +39,7 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 
 - In your CLI, run the command `node server.js` to start your server. You can now interact with your database in Insomnia. See video and screenshots below:  
 
-Watch the walkthrough tutorial video here: https://drive.google.com/file/d/10YjP-nYZSdzPzUtMp4ox9CEmUEA1qYkQ/view  
+Watch the walkthrough tutorial video here: https://drive.google.com/file/d/10YjP-nYZSdzPzUtMp4ox9CEmUEA1qYkQ/view    
 
 ![GET - all users](assets/screenshot-get-all-users.png)  
 ![GET - all thoughts](assets/screenshot-get-all-thoughts.png)  
